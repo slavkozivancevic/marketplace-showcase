@@ -259,48 +259,98 @@
         </div>
 
         <div class="arch">
-          <pre><code>                 ┌───────────────────────────┐
-                 │         Browser         │
-                 └─────────────┬─────────────┘
-                              │ HTTPS · WSS
-                              ▼
-┌────────────────────────────────────────────────────────────────┐
-│                        marketplace                        │
-│   Next.js 16 · React 19 · Prisma 7 · Postgres 17 · Redis  │
-│   Storefront · Dashboard · Admin · Stripe + COD · Clerk   │
-└──────────────┬──────────────────────────────────┬──────────────┘
-              │                               │
-              │  SNS publish                  │  WSS · HTTPS
-              │  order/invite/role events     │
-              ▼                               ▼
-┌─────────────────────────────┐    ┌─────────────────────────────┐
-│ marketplace-notifications │   │  marketplace-messaging    │
-│                           │   │                           │
-│ SQS · retry=3 · DLQ       │   │  API GW WebSocket + HTTP  │
-│             ▼             │   │  DynamoDB single table    │
-│ Lambda · processEvent     │   │   (PK/SK · 2× GSI · TTL)  │
-│  - idempotency claim      │   │  S3 (presigned PUT/GET)   │
-│   NOTIF#eventId · TTL 30d │   │  JWT (jose) · ULID        │
-│  - localized HTML         │   │                           │
-│   (en · sr · de · es)     │   │  Publishes SNS:           │
-│  - SES SendEmail          │   │   conversation.*          │
-│                           │   └──────────────┬──────────────┘
-│ EventBridge cron          │                 │
-│  Mon 06:00 UTC            │                 ▼
-│  - refreshFxRates         │   ┌─────────────────────────────┐
-│                           │   │ marketplace-conversation- │
-└─────────────────────────────┘   │ search                    │
-                                │                           │
-                                │ SQS · retry=3 · DLQ       │
-                                │             ▼             │
-                                │ Lambda · processEvent     │
-                                │  - enrich w/ Clerk names  │
-                                │  - write DynamoDB index   │
-                                │                           │
-                                │ HTTP API · GET /search    │
-                                │  - DynamoDB               │
-                                │    FilterExpression       │
-                                └─────────────────────────────┘</code></pre>
+          <div class="arch-tier">
+            <div class="arch-pill">
+              <span class="arch-pill-dot"></span>
+              <span>Browser</span>
+              <span class="arch-pill-meta">HTTPS · WSS</span>
+            </div>
+          </div>
+
+          <div class="arch-connector" aria-hidden="true"></div>
+
+          <article class="arch-card arch-card-core">
+            <header>
+              <span class="arch-tag arch-tag-core">Core</span>
+              <h3>marketplace</h3>
+            </header>
+            <div class="arch-chips">
+              <span>Next.js 16</span>
+              <span>React 19</span>
+              <span>Prisma 7</span>
+              <span>Postgres 17</span>
+              <span>Redis</span>
+              <span>Clerk</span>
+              <span>Stripe + COD</span>
+            </div>
+            <p class="arch-card-desc">Storefront · Seller dashboard · Admin · Checkout</p>
+          </article>
+
+          <div class="arch-bus">
+            <div class="arch-bus-rail"></div>
+            <div class="arch-bus-pill">
+              <span class="arch-bus-title">SNS event bus</span>
+              <span class="arch-bus-events">order.* · invite.* · role.* · conversation.*</span>
+            </div>
+            <div class="arch-bus-rail"></div>
+          </div>
+
+          <div class="arch-services">
+            <article class="arch-card">
+              <header>
+                <span class="arch-tag">Consumer</span>
+                <h3>marketplace-notifications</h3>
+              </header>
+              <div class="arch-chips">
+                <span>SQS</span>
+                <span>Lambda</span>
+                <span>DynamoDB</span>
+                <span>SES</span>
+                <span>EventBridge</span>
+              </div>
+              <ul>
+                <li>Idempotency claim · <code>NOTIF#eventId</code> · TTL 30d</li>
+                <li>Localized HTML (en · sr · de · es)</li>
+                <li>Weekly FX-rate cron · Mon 06:00 UTC</li>
+              </ul>
+            </article>
+
+            <article class="arch-card">
+              <header>
+                <span class="arch-tag">Hybrid</span>
+                <h3>marketplace-messaging</h3>
+              </header>
+              <div class="arch-chips">
+                <span>API GW WS + HTTP</span>
+                <span>Lambda</span>
+                <span>DynamoDB</span>
+                <span>S3 presigned</span>
+              </div>
+              <ul>
+                <li>Single-table · PK/SK · 2× GSI · TTL sweep</li>
+                <li>Browser ↔ WSS · attachments via presigned PUT</li>
+                <li>Publishes <code>conversation.*</code> back to SNS</li>
+              </ul>
+            </article>
+
+            <article class="arch-card">
+              <header>
+                <span class="arch-tag">Consumer</span>
+                <h3>marketplace-conversation-search</h3>
+              </header>
+              <div class="arch-chips">
+                <span>SQS</span>
+                <span>Lambda</span>
+                <span>DynamoDB</span>
+                <span>HTTP API</span>
+              </div>
+              <ul>
+                <li>Consumes <code>conversation.*</code> events</li>
+                <li>Enriches with Clerk member names</li>
+                <li><code>GET /search</code> · FilterExpression</li>
+              </ul>
+            </article>
+          </div>
         </div>
       </section>
 
