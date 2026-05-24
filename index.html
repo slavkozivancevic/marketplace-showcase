@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Marketplace Platform — multi-tenant e-commerce on Next.js 16 + AWS serverless</title>
+    <title>Marketplace Platform - multi-tenant e-commerce on Next.js 16 + AWS serverless</title>
     <meta
       name="description"
       content="Production-grade marketplace built as 4 services: Next.js 16 storefront + 3 AWS serverless microservices communicating over SNS/SQS. Real-time chat, multi-currency, i18n in 4 locales."
@@ -69,8 +69,8 @@
               <div class="stat-label">locales · EN · SR · DE · ES</div>
             </div>
             <div class="stat">
-              <div class="stat-num">2</div>
-              <div class="stat-label">currencies · EUR · RSD</div>
+              <div class="stat-num">3</div>
+              <div class="stat-label">currencies · USD · EUR · RSD</div>
             </div>
             <div class="stat">
               <div class="stat-num">1×</div>
@@ -79,7 +79,7 @@
           </div>
           <div class="hero-cta">
             <a class="btn btn-primary" href="https://github.com/slavkozivancevic/marketplace" target="_blank" rel="noopener">
-              GitHub — marketplace
+              GitHub - marketplace
             </a>
             <a class="btn btn-ghost" href="#architecture">See the architecture</a>
           </div>
@@ -89,32 +89,33 @@
       <!-- ───── FEATURES (screenshots) ────────────────────────────────────── -->
       <section id="features" class="section">
         <div class="section-head">
-          <span class="eyebrow">01 — Storefront</span>
+          <span class="eyebrow">01 - Storefront</span>
           <h2>The landing page does the marketing</h2>
           <p>
             Server-rendered marketing surface with a featured-departments rail. The
             <em>Shop by Department</em> carousel is fed from the same <code>Category</code> tree
-            that powers product filtering — one source of truth, two surfaces. Theme switcher,
-            currency switcher, and locale switcher all persist via cookies and survive SSR.
+            that powers product filtering - one source of truth, two surfaces. Theme, currency,
+            and locale switchers are all reflected server-side on the very first render - no
+            client-side hydration flash, no layout shift.
           </p>
         </div>
         <figure class="shot">
-          <img src="screenshots/01a-storefront-hero.png" alt="Storefront landing — hero" loading="lazy" />
-          <figcaption>Landing — hero · light theme · English</figcaption>
+          <img src="screenshots/01a-storefront-hero.png" alt="Storefront landing - hero" loading="lazy" />
+          <figcaption>Landing - hero · light theme · English</figcaption>
         </figure>
         <figure class="shot">
           <img src="screenshots/01b-storefront-departments.png" alt="Shop by Department rail" loading="lazy" />
-          <figcaption>Shop by Department — fed from the live category tree</figcaption>
+          <figcaption>Shop by Department - fed from the live category tree</figcaption>
         </figure>
       </section>
 
       <section class="section">
         <div class="section-head">
-          <span class="eyebrow">02 — Discovery</span>
+          <span class="eyebrow">02 - Discovery</span>
           <h2>Faceted listing with a frictionless add-to-cart</h2>
           <p>
             Filter sidebar (department, price, customer reviews, deals, product type, brand) keeps
-            all state in the URL via <code>nuqs</code> — every filter combination is shareable and
+            all state in the URL via <code>nuqs</code> - every filter combination is shareable and
             SSR-correct. Cards surface aggregate ratings, per-product video badges, and
             compare-at-price strikethroughs so buyers can compare without a click-through. The
             Amazon-style quick-add modal lets them pick a variant and add to cart without leaving
@@ -123,18 +124,18 @@
           </p>
         </div>
         <figure class="shot">
-          <img src="screenshots/02a-listing.png" alt="Product listing — clean grid with filter sidebar" loading="lazy" />
-          <figcaption>Listing — filter sidebar (left) · grid with ratings, video badges, compare-at prices (right)</figcaption>
+          <img src="screenshots/02a-listing.png" alt="Product listing - clean grid with filter sidebar" loading="lazy" />
+          <figcaption>Listing - filter sidebar (left) · grid with ratings, video badges, compare-at prices (right)</figcaption>
         </figure>
         <figure class="shot">
           <img src="screenshots/02b-listing-quickadd.png" alt="Listing with quick-add modal open" loading="lazy" />
-          <figcaption>Same listing — quick-add modal with variant picker, no page transition</figcaption>
+          <figcaption>Same listing - quick-add modal with variant picker, no page transition</figcaption>
         </figure>
       </section>
 
       <section class="section">
         <div class="section-head">
-          <span class="eyebrow">03 — Product detail</span>
+          <span class="eyebrow">03 - Product detail</span>
           <h2>Variant matrix, reviews, and a buyer-to-seller chat hook</h2>
           <p>
             Two-axis variant matrix (color × size) with per-variant SKU, price, stock, and
@@ -147,100 +148,101 @@
         </div>
         <figure class="shot">
           <img src="screenshots/03a-pdp.png" alt="Product detail page" loading="lazy" />
-          <figcaption>PDP — gallery, variant pickers, "Message seller" → opens chat</figcaption>
+          <figcaption>PDP - gallery, variant pickers, "Message seller" → opens chat</figcaption>
         </figure>
         <figure class="shot">
-          <img src="screenshots/03b-variants.png" alt="Variants table — 12 rows" loading="lazy" />
-          <figcaption>Variants table — every (color × size) combination, individually priced and stocked</figcaption>
+          <img src="screenshots/03b-variants.png" alt="Variants table - 12 rows" loading="lazy" />
+          <figcaption>Variants table - every (color × size) combination, individually priced and stocked</figcaption>
         </figure>
         <figure class="shot">
           <img src="screenshots/03c-reviews-related.png" alt="Reviews and related products carousel" loading="lazy" />
-          <figcaption>Reviews + "You may also like" — Embla autoplay carousel, brand &amp; category affinity</figcaption>
+          <figcaption>Reviews + "You may also like" - Embla autoplay carousel, brand &amp; category affinity</figcaption>
         </figure>
       </section>
 
       <section class="section">
         <div class="section-head">
-          <span class="eyebrow">04 — Real-time chat · marketplace-messaging</span>
+          <span class="eyebrow">04 - Real-time chat · marketplace-messaging</span>
           <h2>WebSocket chat built on Lambda &amp; DynamoDB</h2>
           <p>
             Buyers and sellers talk in real time over a persistent WebSocket managed by API Gateway.
-            All state — conversations, messages, connection records, reactions — lives in a single
+            All state - conversations, messages, connection records, reactions - lives in a single
             DynamoDB table with two GSIs. Fan-out delivery queries <code>GSI2</code> for every
             active connection of the recipient and pushes via <code>ApiGatewayManagementApi</code>.
             Image and PDF attachments go browser → S3 via presigned PUTs (zero-byte Lambda
             traffic); the in-app PDF viewer is rendered with <code>pdfjs-dist</code>.
           </p>
         </div>
-        <figure class="shot">
-          <img src="screenshots/04-chat.png" alt="Chat drawer — image and PDF attachments, emoji reactions, read receipts" loading="lazy" />
-          <figcaption>Chat drawer — image + PDF attachments, emoji reactions, read receipts</figcaption>
+        <figure class="shot shot-narrow">
+          <img src="screenshots/04-chat.png" alt="Chat drawer - image and PDF attachments, emoji reactions, read receipts" loading="lazy" />
+          <figcaption>Chat drawer - image + PDF attachments, emoji reactions, read receipts</figcaption>
         </figure>
       </section>
 
       <section class="section">
         <div class="section-head">
-          <span class="eyebrow">05 — From checkout to inbox · marketplace-notifications</span>
+          <span class="eyebrow">05 - From checkout to inbox · marketplace-notifications</span>
           <h2>One purchase, four side-effects, zero coupling</h2>
           <p>
             The Stripe webhook persists the order and publishes a single SNS event, then returns
             200. The notifications Lambda consumes the event from SQS, claims it idempotently in
             DynamoDB, hydrates with order details via an internal API, and dispatches localized SES
-            emails — one to the buyer, one per seller organization. The marketplace itself never
+            emails - one to the buyer, one per seller organization. The marketplace itself never
             touches SES. The seller sees the same order in the dashboard, ready to fulfill.
           </p>
         </div>
         <figure class="shot">
-          <img src="screenshots/05a-checkout-success.png" alt="Checkout success — order persisted, SNS event fired" loading="lazy" />
-          <figcaption>1 · Checkout success — order persisted, SNS event published</figcaption>
+          <img src="screenshots/05a-checkout-success.png" alt="Checkout success - order persisted, SNS event fired" loading="lazy" />
+          <figcaption>1 · Checkout success - order persisted, SNS event published</figcaption>
         </figure>
         <figure class="shot">
           <img src="screenshots/05b-emails.png" alt="Buyer and seller transactional emails" loading="lazy" />
-          <figcaption>2 · Buyer + seller emails — rendered &amp; sent by the notifications Lambda</figcaption>
+          <figcaption>2 · Buyer + seller emails - rendered &amp; sent by the notifications Lambda</figcaption>
         </figure>
         <figure class="shot">
           <img src="screenshots/05c-dashboard-order.png" alt="Seller dashboard order detail" loading="lazy" />
-          <figcaption>3 · Seller dashboard — same order, line items, shipping, status</figcaption>
+          <figcaption>3 · Seller dashboard - same order, line items, shipping, status</figcaption>
         </figure>
       </section>
 
       <section class="section">
         <div class="section-head">
-          <span class="eyebrow">06 — Admin · bulk import</span>
+          <span class="eyebrow">06 - Admin · bulk import</span>
           <h2>CSV bulk import with per-row validation</h2>
           <p>
             Admin power-feature: download a template, paste or upload a CSV, get a row-by-row
             preview with valid / invalid badges and the exact Zod error message inline. Brands and
             categories are resolved by slug. The importer reuses the same server actions and
-            validation schemas as the single-product form — no duplicate validation logic.
+            validation schemas as the single-product form - no duplicate validation logic.
           </p>
         </div>
         <figure class="shot">
-          <img src="screenshots/06a-bulk-import.png" alt="Bulk operations — Import from CSV tab" loading="lazy" />
-          <figcaption>Bulk import tab — template download, field reference, CSV paste / upload</figcaption>
+          <img src="screenshots/06a-bulk-import.png" alt="Bulk operations - Import from CSV tab" loading="lazy" />
+          <figcaption>Bulk import tab - template download, field reference, CSV paste / upload</figcaption>
         </figure>
         <figure class="shot">
-          <img src="screenshots/06b-bulk-review.png" alt="Review &amp; import table — 1 valid, 1 invalid" loading="lazy" />
-          <figcaption>Review &amp; import — row-level validation, exact error message, partial import</figcaption>
+          <img src="screenshots/06b-bulk-review.png" alt="Review &amp; import table - 1 valid, 1 invalid" loading="lazy" />
+          <figcaption>Review &amp; import - row-level validation, exact error message, partial import</figcaption>
         </figure>
       </section>
 
       <section class="section">
         <div class="section-head">
-          <span class="eyebrow">07 — i18n · currencies · theming</span>
-          <h2>Four locales, two currencies, themable from the cookie</h2>
+          <span class="eyebrow">07 - i18n · currencies · theming</span>
+          <h2>Four locales, three currencies, themable storefront</h2>
           <p>
-            <code>next-intl v4</code> with a cookie-based locale (<code>NEXT_LOCALE</code>) — works
-            in both server and client components without URL routing overhead. Per-product
+            <code>next-intl v4</code> powers four locales (en, sr, de, es). Per-product
             translations live in a dedicated table; the search blob is rebuilt across all locales
-            so cross-language search works out of the box. Currency rates are refreshed weekly by
-            an EventBridge cron in the notifications service. Theme (light / cosmos / etc.) is
-            also cookie-driven and survives SSR — no flash.
+            so cross-language search works out of the box. Display currency switches between USD,
+            EUR, and RSD - rates are refreshed weekly by an EventBridge cron in the notifications
+            service. Four themes ship out of the box - <em>light</em>, <em>dark</em>,
+            <em>system</em> (follows OS preference), and <em>cosmos</em> - resolved server-side on
+            first render, no flash.
           </p>
         </div>
         <figure class="shot">
           <img src="screenshots/07-i18n-theme.png" alt="Listing in Serbian, RSD prices, cosmos dark theme" loading="lazy" />
-          <figcaption>Same listing — Serbian copy · RSD prices · cosmos dark theme</figcaption>
+          <figcaption>Same listing - Serbian copy · RSD prices · cosmos dark theme</figcaption>
         </figure>
       </section>
 
@@ -251,51 +253,54 @@
           <h2>Four services, one event bus</h2>
           <p>
             The marketplace publishes domain events to SNS; downstream services consume them via SQS
-            with DLQs. Cross-service discovery happens through SSM Parameter Store — no hardcoded
+            with DLQs. Cross-service discovery happens through SSM Parameter Store - no hardcoded
             ARNs, services can be torn down and redeployed independently.
           </p>
         </div>
 
         <div class="arch">
-          <pre><code>                          ┌───────────────────────────────────────────────────┐
-                          │                    Browser                        │
-                          └─────────────────────┬─────────────────────────────┘
-                                                │ HTTPS · WSS
-                                                ▼
-       ┌─────────────────────────────────────────────────────────────────────────────┐
-       │  marketplace  ·  Next.js 16 · React 19 · Postgres 17 · Prisma 7 · Redis     │
-       │  Storefront · Seller dashboard · Admin · Stripe + COD · S3 media            │
-       └─────┬───────────────────────────┬──────────────────────────┬────────────────┘
-             │ SNS publish               │ HTTPS (presigned)         │ HTTPS (server)
-             │ order.* · invite.* ·      │                           │
-             │ member.role_changed       ▼                           ▼
-             ▼                  ┌────────────────────┐   ┌──────────────────────────┐
-   ┌──────────────────────┐    │  marketplace-      │   │ marketplace-conversation │
-   │ NotificationEvents   │    │  messaging         │   │ -search                  │
-   │ SNS Topic            │    │  API GW WebSocket  │   │ HTTP API /search         │
-   └──────┬───────────────┘    │  API GW HTTP       │   └──────────┬───────────────┘
-          │                    │  DynamoDB (single  │              │
-          ▼                    │  table, 2× GSI)    │              │ DynamoDB query
-   ┌──────────────────────┐    │  S3 (attachments)  │              │ (FilterExpression)
-   │  SQS (retry=3, DLQ)  │    └──────────┬─────────┘              │
-   └──────┬───────────────┘               │ SNS publish            │
-          │                               │ conversation.*         │
-          ▼                               ▼                        │
-   ┌──────────────────────┐    ┌──────────────────────┐            │
-   │ Lambda: processEvent │    │ SearchEvents SNS     │            │
-   │ ─ idempotency claim  │    └──────────┬───────────┘            │
-   │   (DynamoDB cond.    │               ▼                        │
-   │    PutItem, TTL 30d) │    ┌──────────────────────┐            │
-   │ ─ render localized   │    │ SQS (retry=3, DLQ)   │            │
-   │   HTML (en/sr/de/es) │    └──────────┬───────────┘            │
-   │ ─ SES SendEmail      │               ▼                        │
-   └──────────────────────┘    ┌──────────────────────┐            │
-                               │ Lambda: processEvent │────────────┘
-   ┌──────────────────────┐    │ ─ enrich w/ Clerk    │
-   │ EventBridge cron     │    │   display names      │
-   │ Mon 06:00 UTC        │    │ ─ write DynamoDB     │
-   │ refreshCurrencyRates │    │   search index       │
-   └──────────────────────┘    └──────────────────────┘</code></pre>
+          <pre><code>                 ┌───────────────────────────┐
+                 │         Browser         │
+                 └─────────────┬─────────────┘
+                              │ HTTPS · WSS
+                              ▼
+┌────────────────────────────────────────────────────────────────┐
+│                        marketplace                        │
+│   Next.js 16 · React 19 · Prisma 7 · Postgres 17 · Redis  │
+│   Storefront · Dashboard · Admin · Stripe + COD · Clerk   │
+└──────────────┬──────────────────────────────────┬──────────────┘
+              │                               │
+              │  SNS publish                  │  WSS · HTTPS
+              │  order/invite/role events     │
+              ▼                               ▼
+┌─────────────────────────────┐    ┌─────────────────────────────┐
+│ marketplace-notifications │   │  marketplace-messaging    │
+│                           │   │                           │
+│ SQS · retry=3 · DLQ       │   │  API GW WebSocket + HTTP  │
+│             ▼             │   │  DynamoDB single table    │
+│ Lambda · processEvent     │   │   (PK/SK · 2× GSI · TTL)  │
+│  - idempotency claim      │   │  S3 (presigned PUT/GET)   │
+│   NOTIF#eventId · TTL 30d │   │  JWT (jose) · ULID        │
+│  - localized HTML         │   │                           │
+│   (en · sr · de · es)     │   │  Publishes SNS:           │
+│  - SES SendEmail          │   │   conversation.*          │
+│                           │   └──────────────┬──────────────┘
+│ EventBridge cron          │                 │
+│  Mon 06:00 UTC            │                 ▼
+│  - refreshFxRates         │   ┌─────────────────────────────┐
+│                           │   │ marketplace-conversation- │
+└─────────────────────────────┘   │ search                    │
+                                │                           │
+                                │ SQS · retry=3 · DLQ       │
+                                │             ▼             │
+                                │ Lambda · processEvent     │
+                                │  - enrich w/ Clerk names  │
+                                │  - write DynamoDB index   │
+                                │                           │
+                                │ HTTP API · GET /search    │
+                                │  - DynamoDB               │
+                                │    FilterExpression       │
+                                └─────────────────────────────┘</code></pre>
         </div>
       </section>
 
@@ -312,7 +317,7 @@
             <p>
               The Stripe webhook returns 200 as soon as the order is persisted and an SNS event is
               published. SES failures don't break checkout; SQS retries and a DLQ absorb them.
-              Checkout success and customer notification are decoupled — the way they should be.
+              Checkout success and customer notification are decoupled - the way they should be.
             </p>
           </article>
 
@@ -350,7 +355,7 @@
           <article class="card">
             <h3>Browser → S3 direct, with safety net</h3>
             <p>
-              Product and chat-attachment uploads bypass the application server entirely — presigned
+              Product and chat-attachment uploads bypass the application server entirely - presigned
               PUTs from the browser. Every freshly uploaded object carries a
               <code>lifecycle=pending</code> tag; an S3 lifecycle rule sweeps anything still tagged
               after 24h, so abandoned form uploads never become long-term orphans.
@@ -370,7 +375,7 @@
           <article class="card">
             <h3>Zero-trust between services</h3>
             <p>
-              Inter-service calls authenticate with internal API keys stored in SSM SecureString —
+              Inter-service calls authenticate with internal API keys stored in SSM SecureString -
               never in Lambda environment variables, never in source. Each service reads its key at
               cold start and verifies the <code>x-api-key</code> header on incoming requests.
             </p>
