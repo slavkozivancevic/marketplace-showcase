@@ -189,6 +189,9 @@
             DynamoDB, hydrates with order details via an internal API, and dispatches localized SES
             emails - one to the buyer, one per seller organization. The marketplace itself never
             touches SES. The seller sees the same order in the dashboard, ready to fulfill.
+            The same fire-and-forget pipeline carries the whole post-purchase lifecycle -
+            shipping &amp; delivery, Stripe Connect payouts, returns/RMA, and AI review-moderation
+            decisions - each a typed event, rendered in the recipient's language.
           </p>
         </div>
         <figure class="shot">
@@ -290,7 +293,7 @@
             <div class="arch-bus-rail"></div>
             <div class="arch-bus-pill">
               <span class="arch-bus-title">SNS event bus</span>
-              <span class="arch-bus-events">order.* · invite.* · role.* · conversation.*</span>
+              <span class="arch-bus-events">order.* · payout.* · return.* · review.* · invite.* · role.* · conversation.*</span>
             </div>
             <div class="arch-bus-rail"></div>
           </div>
