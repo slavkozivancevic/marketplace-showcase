@@ -142,8 +142,11 @@
             dedicated images. The compare-at price strikethrough and per-variant discount badges
             are computed server-side. The <em>Message seller</em> button opens the WebSocket chat
             drawer scoped to a fresh buyer↔seller conversation for that product. Below the fold:
-            a per-product review list with star ratings, and a <em>You may also like</em> Embla
-            autoplay carousel of related products surfaced from the same brand and category.
+            a per-product review list with star ratings, then three Embla autoplay carousels off
+            one shared <code>ProductCard</code> - <em>You may also like</em> (brand &amp; category
+            affinity), <em>Frequently bought together</em> (derived from real <code>OrderItem</code>
+            co-occurrence), and <em>Recently viewed</em> (replayed from an append-only interaction
+            log keyed by signed-in user or anonymous session).
           </p>
         </div>
         <figure class="shot">
@@ -156,7 +159,7 @@
         </figure>
         <figure class="shot">
           <img src="screenshots/03c-reviews-related.png" alt="Reviews and related products carousel" loading="lazy" />
-          <figcaption>Reviews + "You may also like" - Embla autoplay carousel, brand &amp; category affinity</figcaption>
+          <figcaption>Reviews + recommendation strips - "You may also like", "Frequently bought together", "Recently viewed"</figcaption>
         </figure>
       </section>
 
@@ -191,7 +194,10 @@
             touches SES. The seller sees the same order in the dashboard, ready to fulfill.
             The same fire-and-forget pipeline carries the whole post-purchase lifecycle -
             shipping &amp; delivery, Stripe Connect payouts, returns/RMA, and AI review-moderation
-            decisions - each a typed event, rendered in the recipient's language.
+            decisions - each a typed event, rendered in the recipient's language. Every order also
+            gets a sequential <strong>PDF invoice</strong> rendered server-side with
+            <code>@react-pdf/renderer</code> (line items, product thumbnails, applied coupon) and
+            stored on S3.
           </p>
         </div>
         <figure class="shot">
@@ -443,6 +449,38 @@
               and the chat drawer.
             </p>
           </article>
+
+          <article class="card">
+            <h3>Platform-funded coupons, seller made whole</h3>
+            <p>
+              Coupon discounts come out of the platform's commission, not the seller's payout - the
+              seller receives full net on every line, applied as a one-off Stripe discount at
+              checkout (percent / fixed · min-order · usage cap · expiry). Shipping is the seller's:
+              each org sets its own flat rate and free-shipping threshold, totaled per-seller on
+              multi-vendor carts.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Order status on two axes</h3>
+            <p>
+              Order state isn't one enum. <code>PaymentStatus</code> (unpaid → paid → refunded) and
+              <code>FulfillmentStatus</code> (unfulfilled → delivered) move independently and the
+              display status is derived. A COD order can be delivered-but-unpaid; a Stripe order
+              paid-but-unshipped - both representable without contradiction.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Append-only money ledger + audit log</h3>
+            <p>
+              Every money movement - charge, refund, payout, fee - is written to an append-only
+              <code>PaymentTransaction</code> ledger, optionally per seller org, so refunds and
+              Stripe Connect payouts reconcile against a single trail. A separate append-only
+              <code>AuditLog</code> records every admin/seller mutation (actor, action, JSON diff),
+              surfaced read-only in the admin panel.
+            </p>
+          </article>
         </div>
       </section>
 
@@ -464,6 +502,7 @@
               <li>TanStack Query v5 · TanStack Virtual</li>
               <li>react-hook-form · Zod 4</li>
               <li>nuqs · Zustand v5</li>
+              <li><code>@react-pdf/renderer</code> · invoices</li>
             </ul>
           </div>
           <div class="stack-col">
@@ -473,6 +512,7 @@
               <li>Redis (ioredis)</li>
               <li>Clerk + Svix webhooks</li>
               <li>Stripe Checkout + webhooks</li>
+              <li>Stripe Connect · seller payouts</li>
               <li>Cash-on-Delivery flow</li>
               <li>AWS S3 + presigned URLs</li>
               <li><code>@t3-oss/env-nextjs</code></li>
