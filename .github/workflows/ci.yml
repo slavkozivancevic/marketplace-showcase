@@ -1,0 +1,44 @@
+name: CI
+
+# Static portfolio site (no build, no package.json), so this does NOT use the
+# shared npm-based reusable-ci.yml from the marketplace repo. The real risk here
+# is a broken screenshot/stylesheet reference, so we gate on a dependency-free
+# asset check and additionally surface dead external links (non-blocking).
+# Deploy is handled by GitHub Pages (branch source + .nojekyll).
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Hard gate: every local src/href in index.html must resolve to a file.
+      - name: Verify local assets resolve
+        run: bash scripts/check-assets.sh
+
+      # Informational: report dead external links without failing the build
+      # (LinkedIn/Google Fonts often reject CI user-agents, so they're excluded).
+      - name: Check external links
+        uses: lycheeverse/lychee-action@v2
+        continue-on-error: true
+        with:
+          args: >-
+            --no-progress
+            --exclude linkedin\.com
+            --exclude fonts\.googleapis\.com
+            --exclude fonts\.gstatic\.com
+            index.html
+          fail: false
