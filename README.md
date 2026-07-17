@@ -34,3 +34,6 @@ Place screenshot PNGs in `screenshots/`. Filenames are referenced from `index.ht
 - `06a-bulk-import.png`
 - `06b-bulk-review.png`
 - `07-i18n-theme.png`
+- `08a-pipeline.png` — AWS CodePipeline (Source → DeployStaging → approval → DeployProduction)
+- `08b-ci.png` — GitHub Actions CI run (lint · typecheck · unit · integration, all green)
+- `08c-codebuild.png` — CodeBuild log (OpenNext build + `sst deploy` on Linux)

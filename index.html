@@ -47,7 +47,7 @@
         <div class="hero-inner">
           <div class="badge">
             <span class="badge-dot"></span>
-            <span>Production-grade · 4 services · event-driven</span>
+            <span>Live on AWS · event-driven · CI/CD pipeline</span>
           </div>
           <h1 class="hero-title">
             A multi-tenant marketplace built like
@@ -58,6 +58,9 @@
             microservices for chat, search, and transactional email, all communicating over an
             <strong>SNS&nbsp;→&nbsp;SQS&nbsp;→&nbsp;Lambda</strong> backbone. Multi-tenant from the
             schema up; multi-currency, multilingual, S3-backed media, Stripe + COD checkout.
+            Every service ships to AWS through a real pipeline -
+            <strong>GitHub Actions&nbsp;→&nbsp;CodePipeline&nbsp;→&nbsp;CodeBuild</strong>, with the
+            storefront compiled to <strong>Lambda + CloudFront</strong> via OpenNext.
           </p>
           <div class="hero-stats">
             <div class="stat">
@@ -255,6 +258,37 @@
         </figure>
       </section>
 
+      <!-- ───── DELIVERY (CI/CD) ──────────────────────────────────────────── -->
+      <section class="section">
+        <div class="section-head">
+          <span class="eyebrow">08 - Delivery</span>
+          <h2>It ships itself - CI on GitHub, CD on AWS</h2>
+          <p>
+            Every push runs the same reusable <strong>GitHub Actions</strong> gate - lint, typecheck,
+            unit and integration tests against an ephemeral Postgres service - with zero cloud
+            credentials. Merges to <code>main</code> hand off to an AWS-native pipeline:
+            <strong>CodePipeline&nbsp;→&nbsp;CodeBuild</strong> builds the app with
+            <strong>OpenNext</strong> and runs <code>sst deploy</code> on Linux, shipping the
+            storefront to <strong>Lambda&nbsp;+&nbsp;CloudFront</strong>. Staging is continuous;
+            production sits behind a manual-approval gate. Every PR gets its own ephemeral
+            <code>pr-&lt;n&gt;</code> stack, deployed and torn down by a workflow that assumes a
+            scoped role via <strong>GitHub OIDC</strong> - no static keys anywhere.
+          </p>
+        </div>
+        <figure class="shot">
+          <img src="screenshots/08a-pipeline.png" alt="AWS CodePipeline - Source, DeployStaging, manual approval, DeployProduction" loading="lazy" />
+          <figcaption>CodePipeline - Source (GitHub) · DeployStaging · manual approval · DeployProduction</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="screenshots/08b-ci.png" alt="GitHub Actions CI run - lint, typecheck, unit and integration tests green" loading="lazy" />
+          <figcaption>GitHub Actions - the reusable CI gate: lint · typecheck · unit · integration (Postgres service)</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="screenshots/08c-codebuild.png" alt="CodeBuild log - OpenNext build and sst deploy on Linux" loading="lazy" />
+          <figcaption>CodeBuild - OpenNext build + <code>sst deploy</code> on Linux</figcaption>
+        </figure>
+      </section>
+
       <!-- ───── ARCHITECTURE ─────────────────────────────────────────────── -->
       <section id="architecture" class="section section-arch">
         <div class="section-head">
@@ -371,6 +405,36 @@
         </div>
 
         <div class="cards">
+          <article class="card">
+            <h3>CI on GitHub, CD on AWS</h3>
+            <p>
+              A deliberate split: GitHub Actions owns the fast, credential-free merge gate (lint,
+              typecheck, unit + integration); AWS owns the deploy path so traffic-shifting, alarms
+              and rollback live where the infrastructure does. CodeBuild runs the build on Linux -
+              which is also what sidesteps OpenNext's Windows quirks entirely.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>No static keys - GitHub OIDC</h3>
+            <p>
+              PR-preview deploys and teardowns assume a repo-scoped IAM role by federating GitHub's
+              OIDC token to STS - zero long-lived AWS keys in the repo or CI. The OIDC provider and
+              the scoped role are themselves IaC (a CloudFormation stack), so the whole pipeline is
+              reproducible from source.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>OpenNext pinned for Next 16</h3>
+            <p>
+              Next.js 16 renamed <code>middleware</code> to a Node-runtime <code>proxy</code>; the
+              OpenNext version SST pins by default predates it, so Clerk's auth context never reached
+              the render and every page came back a blank shell. Pinning OpenNext forward fixed it -
+              a reminder that the adapter, not just the framework, has to be on the same version.
+            </p>
+          </article>
+
           <article class="card">
             <h3>Email out of the request path</h3>
             <p>
