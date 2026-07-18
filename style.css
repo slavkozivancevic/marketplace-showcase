@@ -107,12 +107,10 @@ p code {
   letter-spacing: -0.01em;
 }
 
-.brand-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  box-shadow: 0 0 18px rgba(124, 92, 255, 0.7);
+.brand-mark {
+  display: block;
+  width: 20px;
+  height: 20px;
 }
 
 .brand-name {
