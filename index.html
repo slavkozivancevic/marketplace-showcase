@@ -265,15 +265,30 @@
           <span class="eyebrow">08 - Delivery</span>
           <h2>It ships itself - CI on GitHub, CD on AWS</h2>
           <p>
-            Every push runs the same reusable <strong>GitHub Actions</strong> gate - lint, typecheck,
-            unit and integration tests against an ephemeral Postgres service - with zero cloud
-            credentials. Merges to <code>main</code> hand off to an AWS-native pipeline:
+            Every pull request runs the same reusable <strong>GitHub Actions</strong> gate - lint,
+            typecheck, unit tests, integration tests against an ephemeral Postgres service, and
+            <strong>Playwright</strong> end-to-end tests against a seeded throwaway database - with
+            zero cloud credentials. A branch ruleset makes all four checks
+            <strong>required</strong> and permits squash merges only, so nothing reaches
+            <code>main</code> - and therefore nothing reaches staging - without going green first.
+          </p>
+          <p>
+            The PR title is load-bearing: it becomes the squash commit, so a workflow validates it
+            as a <strong>Conventional Commit</strong> and rewrites near-misses in place
+            (<code>feature:</code>&nbsp;→&nbsp;<code>feat:</code>) before the check runs.
+            <strong>release-please</strong> turns those commits into a rolling release PR; merging
+            it bumps the version, writes the changelog, cuts the tag, and rewrites the version
+            constant that the storefront renders in its own footer.
+          </p>
+          <p>
+            Merges to <code>main</code> hand off to an AWS-native pipeline:
             <strong>CodePipeline&nbsp;→&nbsp;CodeBuild</strong> builds the app with
             <strong>OpenNext</strong> and runs <code>sst deploy</code> on Linux, shipping the
             storefront to <strong>Lambda&nbsp;+&nbsp;CloudFront</strong>. Staging is continuous;
-            production sits behind a manual-approval gate. Every PR gets its own ephemeral
-            <code>pr-&lt;n&gt;</code> stack, deployed and torn down by a workflow that assumes a
-            scoped role via <strong>GitHub OIDC</strong> - no static keys anywhere.
+            production sits behind a manual-approval gate. Label a PR <code>preview</code> and it
+            gets its own ephemeral <code>pr-&lt;n&gt;</code> stack, deployed and torn down by a
+            workflow that assumes a scoped role via <strong>GitHub OIDC</strong> - no static keys
+            anywhere.
           </p>
         </div>
         <figure class="shot">
@@ -281,8 +296,8 @@
           <figcaption>CodePipeline - Source (GitHub) · DeployStaging · manual approval · DeployProduction</figcaption>
         </figure>
         <figure class="shot">
-          <img src="screenshots/08b-ci.png" alt="GitHub Actions CI run - lint, typecheck, unit and integration tests green" loading="lazy" />
-          <figcaption>GitHub Actions - the reusable CI gate: lint · typecheck · unit · integration (Postgres service)</figcaption>
+          <img src="screenshots/08b-ci.png" alt="GitHub Actions CI run - the reusable quality gate, all checks green" loading="lazy" />
+          <figcaption>GitHub Actions - the reusable CI gate running green on a pull request</figcaption>
         </figure>
         <figure class="shot">
           <img src="screenshots/08c-codebuild.png" alt="CodeBuild log - OpenNext build and sst deploy on Linux" loading="lazy" />
@@ -410,9 +425,10 @@
             <h3>CI on GitHub, CD on AWS</h3>
             <p>
               A deliberate split: GitHub Actions owns the fast, credential-free merge gate (lint,
-              typecheck, unit + integration); AWS owns the deploy path so traffic-shifting, alarms
-              and rollback live where the infrastructure does. CodeBuild runs the build on Linux -
-              which is also what sidesteps OpenNext's Windows quirks entirely.
+              typecheck, unit, integration, e2e), so it needs no cloud access at all; AWS owns the
+              deploy path, where a manual-approval stage guards production and traffic-shifting and
+              alarms belong next. CodeBuild runs the build on Linux - which is also what sidesteps
+              OpenNext's Windows quirks entirely.
             </p>
           </article>
 
