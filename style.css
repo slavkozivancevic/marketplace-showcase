@@ -382,7 +382,7 @@ p code {
   border: 1px solid var(--line);
 }
 
-/* Narrow images (chat drawer, mobile-shaped UI) — cap width so they don't get upscaled and pixelated */
+/* Narrow images (chat drawer, mobile-shaped UI) - cap width so they don't get upscaled and pixelated */
 .shot.shot-narrow {
   max-width: 380px;
   margin-left: auto;
@@ -833,5 +833,31 @@ p code {
   .btn {
     justify-content: center;
     width: 100%;
+  }
+}
+
+/* ─── live demo ─────────────────────────────────────────────────────────── */
+.hero-note {
+  max-width: 640px;
+  margin: 20px auto 0;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.hero-note strong {
+  color: var(--text-2);
+}
+
+.demo-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+@media (max-width: 520px) {
+  .demo-links {
+    flex-direction: column;
   }
 }

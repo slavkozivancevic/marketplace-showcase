@@ -28,6 +28,7 @@
           <span class="brand-name">market<span class="brand-verse">verse</span></span>
         </a>
         <nav class="nav-links">
+          <a href="#demo">Live demo</a>
           <a href="#features">Features</a>
           <a href="#architecture">Architecture</a>
           <a href="#decisions">Decisions</a>
@@ -58,7 +59,7 @@
             Next.js 16 storefront with React 19 and the React Compiler, three serverless AWS
             microservices for chat, search, and transactional email, all communicating over an
             <strong>SNS&nbsp;→&nbsp;SQS&nbsp;→&nbsp;Lambda</strong> backbone. Multi-tenant from the
-            schema up; multi-currency, multilingual, S3-backed media, Stripe + COD checkout.
+            schema up; multi-currency, multilingual, per-country dynamic pricing, Stripe + COD checkout.
             Every service ships to AWS through a real pipeline -
             <strong>GitHub Actions&nbsp;→&nbsp;CodePipeline&nbsp;→&nbsp;CodeBuild</strong>, with the
             storefront compiled to <strong>Lambda + CloudFront</strong> via OpenNext.
@@ -82,11 +83,17 @@
             </div>
           </div>
           <div class="hero-cta">
-            <a class="btn btn-primary" href="https://github.com/slavkozivancevic/marketplace" target="_blank" rel="noopener">
+            <a class="btn btn-primary" href="#demo">Try the live demo</a>
+            <a class="btn btn-ghost" href="https://github.com/slavkozivancevic/marketplace" target="_blank" rel="noopener">
               GitHub - marketplace
             </a>
             <a class="btn btn-ghost" href="#architecture">See the architecture</a>
           </div>
+          <p class="hero-note">
+            Runs at <strong>zero monthly cost</strong>: serverless Postgres that scales to zero, Lambda,
+            DynamoDB on-demand, no Redis, no NAT, no always-on box. The first request after a quiet
+            spell takes a few seconds while the database wakes up.
+          </p>
         </div>
       </section>
 
@@ -158,12 +165,12 @@
           <figcaption>PDP - gallery, variant pickers, "Message seller" → opens chat</figcaption>
         </figure>
         <figure class="shot">
-          <img src="screenshots/03b-variants.png" alt="Variants table - 12 rows" loading="lazy" />
-          <figcaption>Variants table - every (color × size) combination, individually priced and stocked</figcaption>
+          <img src="screenshots/03b-variants.png" alt="Seller view - 12 variants with SKU, price, compare-at price and stock" loading="lazy" />
+          <figcaption>Seller view - every (color × size) combination, individually priced and stocked</figcaption>
         </figure>
         <figure class="shot">
           <img src="screenshots/03c-reviews-related.png" alt="Reviews and related products carousel" loading="lazy" />
-          <figcaption>Reviews + recommendation strips - "You may also like", "Frequently bought together", "Recently viewed"</figcaption>
+          <figcaption>Reviews + recommendation strips - "Frequently bought together" from real orders, "Recently viewed" from the interaction log</figcaption>
         </figure>
       </section>
 
@@ -177,12 +184,16 @@
             DynamoDB table with two GSIs. Fan-out delivery queries <code>GSI2</code> for every
             active connection of the recipient and pushes via <code>ApiGatewayManagementApi</code>.
             Image and PDF attachments go browser → S3 via presigned PUTs (zero-byte Lambda
-            traffic); the in-app PDF viewer is rendered with <code>pdfjs-dist</code>.
+            traffic); the in-app PDF viewer is rendered with <code>pdfjs-dist</code>. Typing
+            indicators, online presence and read receipts ride the same socket; a message typed
+            offline waits in a client outbox and is delivered exactly once on reconnect (the client
+            names every message, the server stores each name once). The drawer and the full-page
+            inbox share one connection.
           </p>
         </div>
         <figure class="shot shot-narrow">
-          <img src="screenshots/04-chat.png" alt="Chat drawer - image and PDF attachments, emoji reactions, read receipts" loading="lazy" />
-          <figcaption>Chat drawer - image + PDF attachments, emoji reactions, read receipts</figcaption>
+          <img src="screenshots/04-chat.png" alt="Chat drawer - buyer asking the seller about a product" loading="lazy" />
+          <figcaption>Chat drawer - last seen, delivery ticks, attachments from the paperclip</figcaption>
         </figure>
       </section>
 
@@ -197,7 +208,7 @@
             emails - one to the buyer, one per seller organization. The marketplace itself never
             touches SES. The seller sees the same order in the dashboard, ready to fulfill.
             The same fire-and-forget pipeline carries the whole post-purchase lifecycle -
-            shipping &amp; delivery, Stripe Connect payouts, returns/RMA, and AI review-moderation
+            shipping &amp; delivery, Stripe Connect payouts, returns/RMA, and review-moderation
             decisions - each a typed event, rendered in the recipient's language. Every order also
             gets a sequential <strong>PDF invoice</strong> rendered server-side with
             <code>@react-pdf/renderer</code> (line items, product thumbnails, applied coupon) and
@@ -214,7 +225,7 @@
         </figure>
         <figure class="shot">
           <img src="screenshots/05c-dashboard-order.png" alt="Seller dashboard order detail" loading="lazy" />
-          <figcaption>3 · Seller dashboard - same order, line items, shipping, status</figcaption>
+          <figcaption>3 · Seller dashboard - same order: line items, COD breakdown and commission, buyer and delivery address</figcaption>
         </figure>
       </section>
 
@@ -259,10 +270,97 @@
         </figure>
       </section>
 
+      <section id="demo" class="section">
+        <div class="section-head">
+          <span class="eyebrow">08 - Live demo</span>
+          <h2>One click per role, nothing to sign up for</h2>
+          <p>
+            Each link mints a one-time Clerk sign-in token and lands on that role's home screen -
+            there is no password to type, change or leak. The <strong>buyer</strong> is a normal
+            account: add to cart, chat with a seller, pay with the Stripe test card
+            <code>4242 4242 4242 4242</code> or cash on delivery. The <strong>seller</strong> (a
+            94-product shop) and the <strong>admin</strong> open every screen and form, but the server
+            refuses their saves before any side effect runs - no Stripe refund, no S3 upload, no
+            email - and masks other people's email addresses before they leave the server.
+          </p>
+          <div class="demo-links">
+            <a class="btn btn-primary" href="https://marketverseapp.com/api/demo/sign-in?as=buyer" target="_blank" rel="noopener">Buyer</a>
+            <a class="btn btn-ghost" href="https://marketverseapp.com/api/demo/sign-in?as=seller" target="_blank" rel="noopener">Seller · view only</a>
+            <a class="btn btn-ghost" href="https://marketverseapp.com/api/demo/sign-in?as=admin" target="_blank" rel="noopener">Admin · view only</a>
+          </div>
+        </div>
+        <figure class="shot shot-narrow">
+          <img src="screenshots/11-demo-sign-in.png" alt="Sign-in page with the three one-click demo accounts" loading="lazy" />
+          <figcaption>The sign-in page offers the same three accounts under Clerk's card</figcaption>
+        </figure>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <span class="eyebrow">09 - Dynamic pricing</span>
+          <h2>Scheduled and per-country prices, EU Omnibus included</h2>
+          <p>
+            Sellers attach rules to a product or a single variant: <em>schedule</em> rules (one-off,
+            daily, weekly or monthly, in the seller's time zone and DST-safe) and <em>market</em>
+            rules (a group of countries, or one country). A rule takes a percentage, an amount off
+            or a fixed price - per currency. Schedule rules compile into non-overlapping price
+            windows 90 days ahead, with precedence resolved once at generation time, and the price
+            flips on the first read after a window ends - no per-minute cron, so the database can
+            sleep.
+          </p>
+          <p>
+            The strike-through "was" price follows the EU Omnibus directive: it must be the lowest
+            price of the previous 30 days. A ledger of every price a product has had makes that
+            exact, and per-market and per-country change clocks decide whether the reference can
+            be proven <em>for this buyer</em> - a market rule edited yesterday hides the strike in
+            that market only. The "On sale" filter and its facet count follow the same rule.
+          </p>
+        </div>
+        <figure class="shot">
+          <img src="screenshots/09a-pricing.png" alt="Seller price rules with a 60-day calendar" loading="lazy" />
+          <figcaption>Seller view - a scheduled autumn sale and an upcoming Black Friday on one product, 60-day calendar per variant</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="screenshots/09c-price-by-country.png" alt="Listing priced for a buyer in Germany" loading="lazy" />
+          <figcaption>Storefront - the card is priced for the buyer's country (from CloudFront, overridable in preferences)</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="screenshots/09b-price-markets.png" alt="Admin price markets" loading="lazy" />
+          <figcaption>Admin - countries grouped into price markets; every unmapped country falls into the default one</figcaption>
+        </figure>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <span class="eyebrow">10 - Orders &amp; promises</span>
+          <h2>One sub-order per seller, books that close exactly</h2>
+          <p>
+            A multi-vendor order is split into one part per seller the moment it is created. Each
+            seller ships, cancels or settles cash on delivery only for their own part, with the money
+            snapshotted per part, so a refund or a partial return always lands on the right ledger
+            line. COD balances track what each seller owes the platform in commission - or is owed
+            back when a platform-funded coupon ran deeper than the commission.
+          </p>
+          <p>
+            Before purchase, the buyer sees each seller's promises - delivery lead time and return
+            window - which the return flow then enforces; the cart page shows free-delivery
+            progress and an admin-managed trust strip.
+          </p>
+        </div>
+        <figure class="shot">
+          <img src="screenshots/10a-seller-order.png" alt="Seller order detail - acting on their own part only" loading="lazy" />
+          <figcaption>Seller view of a COD order - "Cancel my items", tracking and shipping act on this seller's part only</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="screenshots/10b-cart.png" alt="Cart page with free-delivery progress and trust strip" loading="lazy" />
+          <figcaption>Cart - Omnibus-safe sale price, delivery promise, free-delivery progress, trust strip</figcaption>
+        </figure>
+      </section>
+
       <!-- ───── DELIVERY (CI/CD) ──────────────────────────────────────────── -->
       <section class="section">
         <div class="section-head">
-          <span class="eyebrow">08 - Delivery</span>
+          <span class="eyebrow">11 - Delivery</span>
           <h2>It ships itself - CI on GitHub, CD on AWS</h2>
           <p>
             Every pull request runs the same reusable <strong>GitHub Actions</strong> gate - lint,
@@ -297,7 +395,7 @@
         </figure>
         <figure class="shot">
           <img src="screenshots/08b-ci.png" alt="GitHub Actions CI run - the reusable quality gate, all checks green" loading="lazy" />
-          <figcaption>GitHub Actions - the reusable CI gate running green on a pull request</figcaption>
+          <figcaption>GitHub Actions - the CI gate (lint, typecheck, unit · integration · E2E) green on a pull request</figcaption>
         </figure>
         <figure class="shot">
           <img src="screenshots/08c-codebuild.png" alt="CodeBuild log - OpenNext build and sst deploy on Linux" loading="lazy" />
@@ -337,8 +435,7 @@
               <span>Next.js 16</span>
               <span>React 19</span>
               <span>Prisma 7</span>
-              <span>Postgres 17</span>
-              <span>Redis</span>
+              <span>Postgres 17 · Neon</span>
               <span>Clerk</span>
               <span>Stripe + COD</span>
             </div>
@@ -370,7 +467,7 @@
               <ul>
                 <li>Idempotency claim · <code>NOTIF#eventId</code> · TTL 30d</li>
                 <li>Localized HTML (en · sr · de · es)</li>
-                <li>Weekly FX-rate cron · Mon 06:00 UTC</li>
+                <li>5 crons · FX rates · bestsellers · digests · price horizon</li>
               </ul>
             </article>
 
@@ -387,6 +484,7 @@
               </div>
               <ul>
                 <li>Single-table · PK/SK · 2× GSI · TTL sweep</li>
+                <li>Typing · presence · read receipts · outbox</li>
                 <li>Browser ↔ WSS · attachments via presigned PUT</li>
                 <li>Publishes <code>conversation.*</code> back to SNS</li>
               </ul>
@@ -562,6 +660,46 @@
               surfaced read-only in the admin panel.
             </p>
           </article>
+
+          <article class="card">
+            <h3>Zero cost, still correct</h3>
+            <p>
+              Nothing runs while nobody is looking: Neon scales to zero, compute is Lambda, queues and
+              tables bill per request. Crons are weekly or monthly - a per-minute job would keep the
+              database awake - and correctness never depends on them: prices roll on the first read
+              after a window boundary. Rate limiting is an in-process window behind one swappable
+              function, so there is no Redis to pay for.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>One exact amount per currency</h3>
+            <p>
+              A price is stored as the amount the seller typed in their currency plus the other
+              currencies derived once and frozen, with a USD-cent mirror for SQL filters. Display never
+              converts, so a price cannot move between saving and reading it back, and a daily rate
+              update cannot re-price the catalog behind the seller's back.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Real 404s under partial prerendering</h3>
+            <p>
+              With <code>cacheComponents</code>, the prerendered shell flushes the status line before a
+              page runs, so <code>notFound()</code> answers 200. Real 404s are decided in the proxy
+              instead - an unknown route, an unservable URL shape, then a slug lookup - and a CI test
+              fails if a new route is not registered.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>A public demo that cannot be broken</h3>
+            <p>
+              View-only demo accounts are enforced at the permission gates, before anything with an
+              outside effect, not by hiding buttons. The gate audit that came with it found an action
+              anyone signed in could call to make themselves an admin - fixed in the same change.
+            </p>
+          </article>
         </div>
       </section>
 
@@ -590,7 +728,7 @@
             <h4>Data &amp; auth</h4>
             <ul>
               <li>PostgreSQL 17 · Prisma 7</li>
-              <li>Redis (ioredis)</li>
+              <li>Neon serverless Postgres</li>
               <li>Clerk + Svix webhooks</li>
               <li>Stripe Checkout + webhooks</li>
               <li>Stripe Connect · seller payouts</li>
