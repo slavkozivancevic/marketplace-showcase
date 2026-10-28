@@ -25,7 +25,7 @@ Place screenshot PNGs in `screenshots/`. Filenames are referenced from `index.ht
 - `02a-listing.png`
 - `02b-listing-quickadd.png`
 - `03a-pdp.png`
-- `03b-variants.png`
+- `03b-specs.png`
 - `03c-reviews-related.png`
 - `04-chat.png`
 - `05a-checkout-success.png`
