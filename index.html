@@ -28,11 +28,11 @@
           <span class="brand-name">market<span class="brand-verse">verse</span></span>
         </a>
         <nav class="nav-links">
-          <a href="#demo">Live demo</a>
           <a href="#features">Features</a>
           <a href="#architecture">Architecture</a>
           <a href="#decisions">Decisions</a>
           <a href="#stack">Stack</a>
+          <a class="nav-cta nav-cta-demo" href="#try">Try the demo</a>
           <a class="nav-cta" href="https://github.com/slavkozivancevic/marketplace" target="_blank" rel="noopener">
             <span>View source</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -55,6 +55,30 @@
             A multi-tenant marketplace built like
             <span class="grad">infrastructure, not a side project.</span>
           </h1>
+          <div id="try" class="try-panel" role="region" aria-labelledby="try-title">
+            <div class="try-head">
+              <span class="try-live"><span class="badge-dot"></span>Live</span>
+              <h2 id="try-title">Try it now - one click, no&nbsp;sign&#8209;up</h2>
+            </div>
+            <div class="try-roles">
+              <a class="try-role try-role-main" href="https://marketverseapp.com/api/demo/sign-in?as=buyer" target="_blank" rel="noopener">
+                <span class="try-role-name">Buyer <span class="try-arrow" aria-hidden="true">→</span></span>
+                <span class="try-role-hint">Your own fresh account: shop, chat with a seller, pay with test card 4242&nbsp;4242&nbsp;4242&nbsp;4242</span>
+              </a>
+              <a class="try-role" href="https://marketverseapp.com/api/demo/sign-in?as=seller" target="_blank" rel="noopener">
+                <span class="try-role-name">Seller <span class="try-arrow" aria-hidden="true">→</span></span>
+                <span class="try-role-hint">A 94-product shop: products, price calendar, orders, payouts - view only</span>
+              </a>
+              <a class="try-role" href="https://marketverseapp.com/api/demo/sign-in?as=admin" target="_blank" rel="noopener">
+                <span class="try-role-name">Admin <span class="try-arrow" aria-hidden="true">→</span></span>
+                <span class="try-role-hint">The whole platform: catalog, markets, users, moderation, audit log - view only</span>
+              </a>
+            </div>
+            <p class="try-note">
+              Opens the app in a new tab. The first click after a quiet spell takes a few seconds while
+              the database wakes up.
+            </p>
+          </div>
           <p class="hero-sub">
             Next.js 16 storefront with React 19 and the React Compiler, three serverless AWS
             microservices for chat, search, and transactional email, all communicating over an
@@ -83,7 +107,6 @@
             </div>
           </div>
           <div class="hero-cta">
-            <a class="btn btn-primary" href="#demo">Try the live demo</a>
             <a class="btn btn-ghost" href="https://github.com/slavkozivancevic/marketplace" target="_blank" rel="noopener">
               GitHub - marketplace
             </a>
@@ -91,8 +114,7 @@
           </div>
           <p class="hero-note">
             Runs at <strong>zero monthly cost</strong>: serverless Postgres that scales to zero, Lambda,
-            DynamoDB on-demand, no Redis, no NAT, no always-on box. The first request after a quiet
-            spell takes a few seconds while the database wakes up.
+            DynamoDB on-demand, no Redis, no NAT, no always-on box.
           </p>
         </div>
       </section>
@@ -276,8 +298,9 @@
           <h2>One click per role, nothing to sign up for</h2>
           <p>
             Each link mints a one-time Clerk sign-in token and lands on that role's home screen -
-            there is no password to type, change or leak. The <strong>buyer</strong> is a normal
-            account: add to cart, chat with a seller, pay with the Stripe test card
+            there is no password to type, change or leak. The <strong>buyer</strong> is made fresh
+            for each visitor - nobody else sees your cart, orders or chat, and it is gone after a
+            day: add to cart, chat with a seller, pay with the Stripe test card
             <code>4242 4242 4242 4242</code> or cash on delivery. The <strong>seller</strong> (a
             94-product shop) and the <strong>admin</strong> open every screen and form, but the server
             refuses their saves before any side effect runs - no Stripe refund, no S3 upload, no
@@ -698,6 +721,10 @@
               View-only demo accounts are enforced at the permission gates, before anything with an
               outside effect, not by hiding buttons. The gate audit that came with it found an action
               anyone signed in could call to make themselves an admin - fixed in the same change.
+              A review after the first real visitors found one more way in: the auth provider's own profile screen
+              let anyone make their own address primary, and read-only was keyed on that address. A
+              demo account's stored email is now pinned in the database, and every demo sign-in puts
+              the account back the way the next visitor needs it.
             </p>
           </article>
         </div>
