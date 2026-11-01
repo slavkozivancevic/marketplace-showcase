@@ -63,15 +63,15 @@
             <div class="try-roles">
               <a class="try-role try-role-main" href="https://marketverseapp.com/api/demo/sign-in?as=buyer" target="_blank" rel="noopener">
                 <span class="try-role-name">Buyer <span class="try-arrow" aria-hidden="true">→</span></span>
-                <span class="try-role-hint">Your own fresh account: shop, chat with a seller, pay with test card 4242&nbsp;4242&nbsp;4242&nbsp;4242</span>
+                <span class="try-role-hint">Your own fresh account: shop, keep a wishlist, chat with a seller, pay with test card 4242&nbsp;4242&nbsp;4242&nbsp;4242</span>
               </a>
               <a class="try-role" href="https://marketverseapp.com/api/demo/sign-in?as=seller" target="_blank" rel="noopener">
                 <span class="try-role-name">Seller <span class="try-arrow" aria-hidden="true">→</span></span>
-                <span class="try-role-hint">A 94-product shop: products, price calendar, orders, payouts - view only</span>
+                <span class="try-role-hint">A 94-product shop: products, price calendar, orders, payouts - view only, no shopping or chat</span>
               </a>
               <a class="try-role" href="https://marketverseapp.com/api/demo/sign-in?as=admin" target="_blank" rel="noopener">
                 <span class="try-role-name">Admin <span class="try-arrow" aria-hidden="true">→</span></span>
-                <span class="try-role-hint">The whole platform: catalog, markets, users, moderation, audit log - view only</span>
+                <span class="try-role-hint">The whole platform: catalog, markets, users, moderation, audit log - view only, no shopping or chat</span>
               </a>
             </div>
             <p class="try-note">
@@ -304,7 +304,9 @@
             <code>4242 4242 4242 4242</code> or cash on delivery. The <strong>seller</strong> (a
             94-product shop) and the <strong>admin</strong> open every screen and form, but the server
             refuses their saves before any side effect runs - no Stripe refund, no S3 upload, no
-            email - and masks other people's email addresses before they leave the server.
+            email - and masks other people's email addresses before they leave the server. They
+            are one account shared by every visitor, so they also get none of the buyer's actions:
+            no cart, wishlist, checkout or chat, and the page says so where the button would be.
           </p>
           <div class="demo-links">
             <a class="btn btn-primary" href="https://marketverseapp.com/api/demo/sign-in?as=buyer" target="_blank" rel="noopener">Buyer</a>
@@ -724,7 +726,10 @@
               A review after the first real visitors found one more way in: the auth provider's own profile screen
               let anyone make their own address primary, and read-only was keyed on that address. A
               demo account's stored email is now pinned in the database, and every demo sign-in puts
-              the account back the way the next visitor needs it.
+              the account back the way the next visitor needs it. A later pass closed the chat: the
+              shared seller and admin get no chat token at all, conversations are opened only by the
+              marketplace server (buyer to the seller of a product), and the messaging service now
+              refuses a message, a reaction or an attachment from anyone outside the conversation.
             </p>
           </article>
         </div>
