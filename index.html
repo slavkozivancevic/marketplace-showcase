@@ -212,6 +212,13 @@
             names every message, the server stores each name once). The drawer and the full-page
             inbox share one connection.
           </p>
+          <p>
+            The gestures are WhatsApp's: swipe a message to reply with a quote (the server stores its
+            own snapshot, so a quote cannot be forged), edit within 15 minutes, delete for everyone
+            or just for yourself, long-press to pick several messages or conversations and act on
+            them in one all-or-nothing request, mark a conversation as unread. On a phone the chat
+            stays above the on-screen keyboard.
+          </p>
         </div>
         <figure class="shot">
           <img src="screenshots/04-chat.png" alt="Full-page inbox - a buyer and a seller talking about a product" loading="lazy" />
@@ -510,8 +517,9 @@
               <ul>
                 <li>Single-table · PK/SK · 2× GSI · TTL sweep</li>
                 <li>Typing · presence · read receipts · outbox</li>
+                <li>Reply · edit · delete for everyone or for me · multi-select</li>
                 <li>Browser ↔ WSS · attachments via presigned PUT</li>
-                <li>Publishes <code>conversation.*</code> back to SNS</li>
+                <li>Publishes <code>conversation.created</code> to SNS</li>
               </ul>
             </article>
 
@@ -790,7 +798,7 @@
           </a>
           <a class="repo" href="https://github.com/slavkozivancevic/marketplace-messaging" target="_blank" rel="noopener">
             <div class="repo-name">marketplace-messaging</div>
-            <div class="repo-desc">WebSocket chat · DynamoDB single-table · S3 attachments</div>
+            <div class="repo-desc">WebSocket chat · replies, edit, delete · DynamoDB single-table · S3 attachments</div>
           </a>
           <a class="repo" href="https://github.com/slavkozivancevic/marketplace-conversation-search" target="_blank" rel="noopener">
             <div class="repo-name">marketplace-conversation-search</div>
