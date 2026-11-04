@@ -690,7 +690,9 @@
               <code>PaymentTransaction</code> ledger, optionally per seller org, so refunds and
               Stripe Connect payouts reconcile against a single trail. A separate append-only
               <code>AuditLog</code> records every admin/seller mutation (actor, action, JSON diff),
-              surfaced read-only in the admin panel.
+              surfaced read-only in the admin panel in the reader's language - every field labelled,
+              money with its currency, dates and countries spelled out - with a test that fails the
+              build if a new field is logged without a label in all four locales.
             </p>
           </article>
 
