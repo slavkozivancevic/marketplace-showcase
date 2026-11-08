@@ -38,6 +38,22 @@ Place screenshot PNGs in `screenshots/`. Filenames are referenced from `index.ht
 - `08b-ci.png` - GitHub Actions CI run, all checks green
 - `08c-codebuild.png` - CodeBuild log (OpenNext build + `sst deploy` on Linux)
 
+## Videos
+
+Short muted loops in `videos/`, each as `.webm` (VP9), `.mp4` (H.264, faststart)
+and a `.jpg` poster. They play only while on screen (IntersectionObserver in
+`index.html`); with `prefers-reduced-motion` they get controls instead.
+
+- `v01-chat-live` - buyer and seller phones side by side, chatting live on staging
+- `v02-chat-gestures` - phone: multi-select delete, edit, offline outbox, quote jump
+- `v03-storefront` - mega menu, facet filter, quick add, free-delivery threshold
+- `v04-locale-currency` - one product in four locales, three currencies, themes
+- `v05-phone-shop` - phone: card gallery swipe, press feedback, variant, cart
+- `v06-seller` - seller dashboard: received orders, order part, price calendar
+
+Recorded on staging with Playwright (CDP screencast, drawn cursor/finger,
+caption pills); only the waits for data are trimmed.
+
 ### Outdated - worth re-shooting
 
 The delivery section (08) grew past its screenshots on 2026-08-22:

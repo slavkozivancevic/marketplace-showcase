@@ -28,6 +28,7 @@
           <span class="brand-name">market<span class="brand-verse">verse</span></span>
         </a>
         <nav class="nav-links">
+          <a href="#motion">In motion</a>
           <a href="#features">Features</a>
           <a href="#architecture">Architecture</a>
           <a href="#decisions">Decisions</a>
@@ -119,6 +120,29 @@
         </div>
       </section>
 
+      <!-- ───── IN MOTION ─────────────────────────────────────────────────── -->
+      <section id="motion" class="section">
+        <div class="section-head">
+          <span class="eyebrow">In motion - recorded on the live staging stack</span>
+          <h2>Two phones, one conversation, nothing refreshed</h2>
+          <p>
+            A fresh demo buyer asks about a product and the seller's inbox lights up over the
+            WebSocket. Then: a live typing indicator, read receipts turning blue, a photo uploaded
+            browser&nbsp;→&nbsp;S3, a long-press reaction, and a swipe-to-reply with a quote, each
+            one appearing on the other phone as it happens. Recorded with Playwright against
+            <a href="https://marketverseapp.com" target="_blank" rel="noopener">marketverseapp.com</a>;
+            only the waits for data are trimmed.
+          </p>
+        </div>
+        <figure class="shot shot-video shot-stage">
+          <video class="autoplay-video" muted loop playsinline preload="none" width="1510" height="1370" poster="videos/v01-chat-live.jpg" aria-label="Two phones side by side: a buyer and a seller chatting live">
+            <source src="videos/v01-chat-live.webm" type="video/webm" />
+            <source src="videos/v01-chat-live.mp4" type="video/mp4" />
+          </video>
+          <figcaption>Buyer (left) and seller (right) on staging - message, typing, read receipts, photo, reaction, quoted reply</figcaption>
+        </figure>
+      </section>
+
       <!-- ───── FEATURES (screenshots) ────────────────────────────────────── -->
       <section id="features" class="section">
         <div class="section-head">
@@ -132,6 +156,13 @@
             client-side hydration flash, no layout shift.
           </p>
         </div>
+        <figure class="shot shot-video">
+          <video class="autoplay-video" muted loop playsinline preload="none" width="1600" height="1000" poster="videos/v03-storefront.jpg" aria-label="Browsing the storefront, filtering, and adding to cart">
+            <source src="videos/v03-storefront.webm" type="video/webm" />
+            <source src="videos/v03-storefront.mp4" type="video/mp4" />
+          </video>
+          <figcaption>Mega menu → department → facet filter → add to cart → free-delivery threshold reached, live</figcaption>
+        </figure>
         <figure class="shot">
           <img src="screenshots/01a-storefront-hero.png" alt="Storefront landing - hero" loading="lazy" />
           <figcaption>Landing - hero · light theme · English</figcaption>
@@ -156,6 +187,13 @@
             an English-only product.
           </p>
         </div>
+        <figure class="shot shot-video shot-phone">
+          <video class="autoplay-video" muted loop playsinline preload="none" width="780" height="1522" poster="videos/v05-phone-shop.jpg" aria-label="Shopping on a phone with touch gestures">
+            <source src="videos/v05-phone-shop.webm" type="video/webm" />
+            <source src="videos/v05-phone-shop.mp4" type="video/mp4" />
+          </video>
+          <figcaption>On a phone - swipe card galleries, every tap answers, gallery swipe, variant, cart</figcaption>
+        </figure>
         <figure class="shot">
           <img src="screenshots/02a-listing.png" alt="Product listing - clean grid with filter sidebar" loading="lazy" />
           <figcaption>Listing - filter sidebar (left) · grid with ratings, video badges, compare-at prices (right)</figcaption>
@@ -220,6 +258,13 @@
             stays above the on-screen keyboard.
           </p>
         </div>
+        <figure class="shot shot-video shot-phone">
+          <video class="autoplay-video" muted loop playsinline preload="none" width="780" height="1522" poster="videos/v02-chat-gestures.jpg" aria-label="Chat gestures on a phone">
+            <source src="videos/v02-chat-gestures.webm" type="video/webm" />
+            <source src="videos/v02-chat-gestures.mp4" type="video/mp4" />
+          </video>
+          <figcaption>Gestures - multi-select and delete for everyone, edit, offline outbox delivered exactly once, tap a quote to jump</figcaption>
+        </figure>
         <figure class="shot">
           <img src="screenshots/04-chat.png" alt="Full-page inbox - a buyer and a seller talking about a product" loading="lazy" />
           <figcaption>Full-page inbox at /messages - a reply quoting the buyer's question, image and PDF attachments, reactions, read receipts, presence</figcaption>
@@ -293,6 +338,13 @@
             first render, no flash.
           </p>
         </div>
+        <figure class="shot shot-video">
+          <video class="autoplay-video" muted loop playsinline preload="none" width="1600" height="1000" poster="videos/v04-locale-currency.jpg" aria-label="Switching language, currency and theme on a product page">
+            <source src="videos/v04-locale-currency.webm" type="video/webm" />
+            <source src="videos/v04-locale-currency.mp4" type="video/mp4" />
+          </video>
+          <figcaption>One product in en → sr → de → es (the slug is translated), USD → EUR → RSD, then dark and cosmos</figcaption>
+        </figure>
         <figure class="shot">
           <img src="screenshots/07-i18n-theme.png" alt="Listing in Serbian, RSD prices, cosmos dark theme" loading="lazy" />
           <figcaption>Same listing - Serbian copy · RSD prices · cosmos dark theme</figcaption>
@@ -379,6 +431,13 @@
             progress and an admin-managed trust strip.
           </p>
         </div>
+        <figure class="shot shot-video">
+          <video class="autoplay-video" muted loop playsinline preload="none" width="1600" height="1000" poster="videos/v06-seller.jpg" aria-label="Seller dashboard: orders and price calendar">
+            <source src="videos/v06-seller.webm" type="video/webm" />
+            <source src="videos/v06-seller.mp4" type="video/mp4" />
+          </video>
+          <figcaption>Seller dashboard - received orders filtered by status, one order's own part, the 60-day price calendar</figcaption>
+        </figure>
         <figure class="shot">
           <img src="screenshots/10a-seller-order.png" alt="Seller order detail - acting on their own part only" loading="lazy" />
           <figcaption>Seller view of a COD order - "Cancel my items", tracking and shipping act on this seller's part only</figcaption>
@@ -826,5 +885,28 @@
         </div>
       </div>
     </footer>
+    <script>
+      // Showcase videos: play only while on screen (saves data on phones), never
+      // by themselves for people who asked for reduced motion - they get controls.
+      (function () {
+        var videos = document.querySelectorAll("video.autoplay-video");
+        var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (reduce || !("IntersectionObserver" in window)) {
+          videos.forEach(function (v) { v.controls = true; v.preload = "metadata"; });
+          return;
+        }
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            var v = e.target;
+            if (e.isIntersecting) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+            else v.pause();
+          });
+        }, { threshold: 0.35 });
+        videos.forEach(function (v) {
+          io.observe(v);
+          v.addEventListener("click", function () { if (v.paused) v.play(); else v.pause(); });
+        });
+      })();
+    </script>
   </body>
 </html>

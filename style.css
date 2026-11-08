@@ -397,6 +397,49 @@ p code {
   font-family: "JetBrains Mono", monospace;
 }
 
+/* ─── video frames ──────────────────────────────────────────────────────── */
+/* width/height on each <video> give it its aspect ratio before it loads, so the
+   page never jumps when a poster or the first frame arrives. */
+.shot-video video {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #0b0b14;
+  cursor: pointer;
+}
+
+/* The two-phone recording carries its own dark stage - no inner border. */
+.shot.shot-stage {
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.shot.shot-stage video {
+  border: 0;
+}
+
+/* Phone-shaped recordings sit in a phone bezel at roughly real size. */
+.shot.shot-phone {
+  max-width: 360px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px;
+  border-radius: 40px;
+  background: #0b0b14;
+}
+
+.shot.shot-phone video {
+  border: 0;
+  border-radius: 30px;
+}
+
+.shot.shot-phone figcaption {
+  padding: 14px 10px 8px;
+}
+
 /* ─── architecture ──────────────────────────────────────────────────────── */
 .section-arch {
   padding-top: 32px;

@@ -13,8 +13,8 @@ missing=0
 
 # Pull every src="..."/href="..." value, keep only local relative paths
 # (drop absolute URLs, mailto:, and pure #anchors).
-refs=$(grep -oE '(src|href)="[^"]+"' "$html" \
-  | sed -E 's/^(src|href)="//; s/"$//' \
+refs=$(grep -oE '(src|href|poster)="[^"]+"' "$html" \
+  | sed -E 's/^(src|href|poster)="//; s/"$//' \
   | grep -vE '^(https?:|mailto:|#)' \
   | sort -u)
 
